@@ -7,7 +7,7 @@
     display: inline-block;
     margin: 10px;
     overflow: hidden;
-    position: relative;
+    position: absolute;
 
     .ticket_border--dotted {
       border: dotted 1px black;
@@ -54,5 +54,14 @@
       text-align: center;
       width: 200px;
     }
+  }
+}
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
   }
 }

@@ -15,49 +15,41 @@ const papaparseOptions = {
   transformHeader: (header) => header.toLowerCase().replace(/\W/g, "_"),
 };
 
+function GenerateArray(count) {
+  var arr = [];
+  for (var i = 0; i < count; i++) {
+    arr.push(i);
+  }
+  return arr;
+}
+
 const handleLoadCSV = (data, fileInfo) => {
   console.log(data, fileInfo);
 };
 
-function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex;
-
-  // While there remain elements to shuffle.
-  while (currentIndex > 0) {
-    // Pick a remaining element.
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-
-  return array;
-}
-
-const onSelectWinner = () => {
+const onSelectWinner = (csv) => {
   console.log("ok selecting!");
+  var expandedCsv = [];
+
+  csv.map((entry, idx) => {
+    GenerateArray(entry.number_of_tickets).map((i) => {
+      expandedCsv.push({ entry: entry, id: idx });
+    });
+  });
+
+  console.log(expandedCsv);
+
+  var randomWinner = Math.floor((Math.random() * 10000) % expandedCsv.length);
+
+  var winnerEntry = expandedCsv[randomWinner];
+  console.log(winnerEntry, randomWinner);
+
+  return csv.filter((entry, idx) => idx != winnerEntry.id);
 };
 
 export const Page = () => {
   const [csv, setCSV] = useState([]);
   const [csvLoaded, setCSVLoaded] = useState(false);
-  const [iteration, setIteration] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCSV((prevCSV) => shuffle(prevCSV));
-      setIteration((prevIter) => prevIter + 1);
-    }, 500);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   return (
     <>
@@ -69,12 +61,19 @@ export const Page = () => {
           setCSVLoaded(false);
         }}
       />
-      <Button size="large" onClick={onSelectWinner} label="Select A Winner!" />
       <br />
       {csvLoaded ? (
         <>
+          <Button
+            size="large"
+            onClick={() => setCSV(onSelectWinner(csv))}
+            label="Select A Winner!"
+          />
+          <br />
+          <br />
+          <br />
           Raffle Participants:
-          <EntrantList iter={iteration} entrantArray={csv} />
+          <EntrantList entrantArray={csv} />
         </>
       ) : (
         <CSVReader

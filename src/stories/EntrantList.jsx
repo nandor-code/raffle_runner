@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Ticket from "./Ticket";
 
-export const EntrantList = ({ entrantArray, ...props }) => {
+export const EntrantList = ({ entrantArray }) => {
   function GenerateArray(count) {
     var arr = [];
     for (var i = 0; i < count; i++) {
@@ -10,6 +10,27 @@ export const EntrantList = ({ entrantArray, ...props }) => {
     }
     return arr;
   }
+
+  function shuffle(array) {
+    let currentIndex = array.length,
+      randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex > 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+
+    return array;
+  }
+
   function GetSubLabel(cur, total) {
     var ret = "(";
     ret += String(cur);
@@ -19,8 +40,26 @@ export const EntrantList = ({ entrantArray, ...props }) => {
     return ret;
   }
 
+  /*
+  const [randomizedCsv, setRandomizedCsv] = useState(entrantArray);
+
+  const [cycle, setCycle] = useState(0);
+
+  useEffect(() => {
+    /*const interval = setInterval(() => {
+      setRandomizedCsv((prevCSV) => shuffle(prevCSV));
+      setCycle((prev) => setCycle(prev + 1));
+    }, 500);
+
+    setRandomizedCsv(entrantArray);
+
+    return () => {
+      //clearInterval(interval);
+    };
+  }, []);
+*/
   return (
-    <div className="tickets">
+    <div key="tickets" className="tickets">
       {entrantArray.map((entry) => (
         <>
           {GenerateArray(entry.number_of_tickets).map((i) => (
@@ -76,3 +115,5 @@ EntrantList.defaultProps = {
   entrantArray: [],
 };
 */
+
+export default EntrantList;

@@ -1,12 +1,15 @@
 import "./App.css";
+import Radium, { StyleRoot } from "radium";
 import { Page } from "./stories/Page";
 
 function App() {
   return (
-    <div className="App">
-      <Page />
-    </div>
+    <StyleRoot>
+      <div className="App">
+        <Page />
+      </div>
+    </StyleRoot>
   );
 }
 
-export default App;
+export default Radium(App);
