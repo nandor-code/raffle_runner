@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import "./ticket.css";
 
-export const Ticket = ({ label, subLabel, animate, ...props }) => {
+export const Ticket = ({ label, superLabel, subLabel, animate, ...props }) => {
   const { height, width } = getWindowDimensions();
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
@@ -81,19 +81,19 @@ export const Ticket = ({ label, subLabel, animate, ...props }) => {
     animation: Rotation == 0 ? "rotation 2s infinite linear" : "",
   };
 
+  const formattedLabel = label.replace(" ", "<br />");
   return (
-    <div className="ticket" style={animate == "true" ? style : {}} {...props}>
-      <div className="top left"></div>
-      <div className="top right"></div>
-      <div className="bottom left"></div>
-      <div className="bottom right"></div>
-      <div className="ticket_border--dotted">
-        <div className="ticket__text">
-          Raffle Ticket
-          <div className="ticket__number"> {label} </div>
-          {subLabel}
-        </div>
+    <div
+      className="ticket"
+      style={animate == "true" ? style : { position: "relative" }}
+      {...props}
+    >
+      Jog-A-Thon Raffle Ticket
+      <div data-number={subLabel} className="ticket__number">
+        {" "}
+        {label}{" "}
       </div>
+      {superLabel ? "(" + superLabel + ")" : ""}
     </div>
   );
 };
@@ -104,6 +104,7 @@ Ticket.propTypes = {
 
 Ticket.defaultProps = {
   label: "First Last",
+  subLabel: "1",
 };
 
 export default Ticket;

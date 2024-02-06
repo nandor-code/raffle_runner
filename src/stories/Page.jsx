@@ -49,9 +49,13 @@ const onSelectWinner = (csv) => {
   };
 };
 
+const blankWinner = {
+  entry: { name: "NoName", number_of_tickets: 0 },
+};
+
 export const Page = () => {
   const [csv, setCSV] = useState([]);
-  const [winnerInfo, setWinnerInfo] = useState({});
+  const [winnerInfo, setWinnerInfo] = useState(blankWinner);
   const [showWinner, setShowWinner] = useState(false);
   const [csvLoaded, setCSVLoaded] = useState(false);
 
@@ -63,7 +67,7 @@ export const Page = () => {
   }
 
   function clearWinner() {
-    setWinnerInfo({});
+    setWinnerInfo(blankWinner);
     setShowWinner(false);
   }
 
@@ -90,16 +94,16 @@ export const Page = () => {
           <br />
           Raffle Participants:
           <EntrantList entrantArray={csv} />
-          <Modal
-            winnerInfo={winnerInfo}
-            handleClose={clearWinner}
-            show={showWinner}
-          >
+          <Modal handleClose={clearWinner} show={showWinner}>
+            <h1 className="text-center animate__animated animate__tada">
+              Congratulations! 🎉
+            </h1>
             <div key="tickets" className="tickets">
               <Ticket
                 animate="false"
-                label={winnerInfo.name}
-                subLabel={String(winnerInfo.number_of_tickets)}
+                label={winnerInfo.entry.name}
+                superLabel="Teacher Name"
+                subLabel={String(winnerInfo.entry.number_of_tickets)}
               />
             </div>
           </Modal>
