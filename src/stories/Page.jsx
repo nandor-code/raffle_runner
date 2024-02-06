@@ -4,6 +4,8 @@ import CSVReader from "react-csv-reader";
 import { Header } from "./Header";
 import { EntrantList } from "./EntrantList";
 import { Button } from "./Button";
+import { Modal } from "./Modal";
+import { Ticket } from "./Ticket";
 
 import "./page.css";
 
@@ -37,19 +39,33 @@ const onSelectWinner = (csv) => {
     });
   });
 
-  console.log(expandedCsv);
-
   var randomWinner = Math.floor((Math.random() * 10000) % expandedCsv.length);
 
   var winnerEntry = expandedCsv[randomWinner];
-  console.log(winnerEntry, randomWinner);
 
-  return csv.filter((entry, idx) => idx != winnerEntry.id);
+  return {
+    newCSV: csv.filter((_, idx) => idx != winnerEntry.id),
+    winnerEntry: winnerEntry,
+  };
 };
 
 export const Page = () => {
   const [csv, setCSV] = useState([]);
+  const [winnerInfo, setWinnerInfo] = useState({});
+  const [showWinner, setShowWinner] = useState(false);
   const [csvLoaded, setCSVLoaded] = useState(false);
+
+  function selectWinner() {
+    var winnerData = onSelectWinner(csv);
+    setCSV(winnerData.newCSV);
+    setWinnerInfo(winnerData.winnerEntry);
+    setShowWinner(true);
+  }
+
+  function clearWinner() {
+    setWinnerInfo({});
+    setShowWinner(false);
+  }
 
   return (
     <>
@@ -66,14 +82,27 @@ export const Page = () => {
         <>
           <Button
             size="large"
-            onClick={() => setCSV(onSelectWinner(csv))}
-            label="Select A Winner!"
+            onClick={selectWinner}
+            label="Select Next Winner!"
           />
           <br />
           <br />
           <br />
           Raffle Participants:
           <EntrantList entrantArray={csv} />
+          <Modal
+            winnerInfo={winnerInfo}
+            handleClose={clearWinner}
+            show={showWinner}
+          >
+            <div key="tickets" className="tickets">
+              <Ticket
+                animate="false"
+                label={winnerInfo.name}
+                subLabel={String(winnerInfo.number_of_tickets)}
+              />
+            </div>
+          </Modal>
         </>
       ) : (
         <CSVReader

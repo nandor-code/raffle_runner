@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import "./ticket.css";
 
-export const Ticket = ({ label, subLabel, ...props }) => {
+export const Ticket = ({ label, subLabel, animate, ...props }) => {
   const { height, width } = getWindowDimensions();
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
@@ -20,7 +20,7 @@ export const Ticket = ({ label, subLabel, ...props }) => {
   function getNextRandomPos() {
     return {
       x: Math.floor(width * (1 - Math.random()) - 250),
-      y: Math.floor(height * (1 - Math.random()) + 200),
+      y: Math.floor(Math.min(height - 250, height * (1 - Math.random()) + 200)),
     };
   }
 
@@ -31,46 +31,48 @@ export const Ticket = ({ label, subLabel, ...props }) => {
   const [Destination, setDestination] = useState(getNextRandomPos());
 
   useEffect(() => {
-    let timer = setInterval(() => {
-      if (Rotation > 0) {
-        setRotation((curRotation) => {
-          return curRotation - 1;
-        });
-      }
+    if (animate == "true") {
+      let timer = setInterval(() => {
+        if (Rotation > 0) {
+          setRotation((curRotation) => {
+            return curRotation - 1;
+          });
+        }
 
-      if (Position.x == Destination.x && Position.y == Destination.y) {
-        // we have arrived.
-        var newDest = getNextRandomPos();
-        setDestination(newDest);
-        setPosition((curPos) => {
-          return { x: curPos.x + 1, y: curPos.y + 1 };
-        });
-      } else {
-        // move closer to our target.
-        setPosition((curPos) => {
-          var nextX =
-            curPos.x == Destination.x
-              ? curPos.x
-              : curPos.x < Destination.x
-              ? curPos.x + 1
-              : curPos.x - 1;
-          var nextY =
-            curPos.y == Destination.y
-              ? curPos.y
-              : curPos.y < Destination.y
-              ? curPos.y + 1
-              : curPos.y - 1;
-          return {
-            x: nextX,
-            y: nextY,
-          };
-        });
-      }
-    }, 0);
+        if (Position.x == Destination.x && Position.y == Destination.y) {
+          // we have arrived.
+          var newDest = getNextRandomPos();
+          setDestination(newDest);
+          setPosition((curPos) => {
+            return { x: curPos.x + 1, y: curPos.y + 1 };
+          });
+        } else {
+          // move closer to our target.
+          setPosition((curPos) => {
+            var nextX =
+              curPos.x == Destination.x
+                ? curPos.x
+                : curPos.x < Destination.x
+                ? curPos.x + 1
+                : curPos.x - 1;
+            var nextY =
+              curPos.y == Destination.y
+                ? curPos.y
+                : curPos.y < Destination.y
+                ? curPos.y + 1
+                : curPos.y - 1;
+            return {
+              x: nextX,
+              y: nextY,
+            };
+          });
+        }
+      }, 0);
 
-    return () => {
-      clearInterval(timer);
-    };
+      return () => {
+        clearInterval(timer);
+      };
+    }
   }, [Position]);
 
   const style = {
@@ -80,7 +82,7 @@ export const Ticket = ({ label, subLabel, ...props }) => {
   };
 
   return (
-    <div className="ticket" style={style} {...props}>
+    <div className="ticket" style={animate == "true" ? style : {}} {...props}>
       <div className="top left"></div>
       <div className="top right"></div>
       <div className="bottom left"></div>
