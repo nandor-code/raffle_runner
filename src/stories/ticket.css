@@ -1,16 +1,11 @@
 .tickets {
   font-family: 'Roboto';
   margin: 15px 70px;
-
+  
 .ticket {
     backface-visibility: hidden;
-    transform: rotate(16deg) translateY(25%) translateZ(0);
-    transform-origin: 50% 50%;
-    top: 50%;
-    left: 50%;
-    margin-top: -65px;
-    margin-left: -144px;
-    position: absolute;
+    margin-top: 15px;
+    margin-left: 15px;
     display: inline-block;
     padding: 15px 25px;
     background-image:
@@ -27,10 +22,6 @@
     border-style: solid;
     border-image: radial-gradient(cover circle, #fa616d 0%, #fa616d 50%, transparent 51%) 0 39% / 15px 4px repeat;
     -webkit-filter: drop-shadow(hsla(0, 0%, 0%, 0.55) 1px 1px 2px);
-  }
-
-  .ticket+.ticket {
-    transform: rotate(-7deg) translateY(-25%) translateX(10px) translateZ(0);
   }
 
   .ticket>div { 
