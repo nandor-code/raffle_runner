@@ -34,7 +34,7 @@ const onSelectWinner = (csv) => {
   var expandedCsv = [];
 
   csv.map((entry, idx) => {
-    GenerateArray(entry.number_of_tickets).map((i) => {
+    GenerateArray(entry.total_tickets).map((i) => {
       expandedCsv.push({ entry: entry, id: idx });
     });
   });
@@ -50,7 +50,7 @@ const onSelectWinner = (csv) => {
 };
 
 const blankWinner = {
-  entry: { name: "NoName", number_of_tickets: 0 },
+  entry: { student: "NoName", total_tickets: 0 },
 };
 
 export const Page = () => {
@@ -101,9 +101,9 @@ export const Page = () => {
             <div key="tickets" className="tickets">
               <Ticket
                 animate="false"
-                label={winnerInfo.entry.name}
-                superLabel="Teacher Name"
-                subLabel={String(winnerInfo.entry.number_of_tickets)}
+                label={winnerInfo.entry.student}
+                superLabel={winnerInfo.entry.teacher}
+                subLabel={String(winnerInfo.entry.total_tickets)}
               />
             </div>
           </Modal>

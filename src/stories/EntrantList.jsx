@@ -24,12 +24,12 @@ export const EntrantList = ({ entrantArray }) => {
     <div key="tickets" className="tickets">
       {entrantArray.map((entry) => (
         <>
-          {GenerateArray(entry.number_of_tickets).map((i) => (
+          {GenerateArray(entry.total_tickets).map((i) => (
             <Ticket
               animate="true"
-              label={entry.name}
-              subLabel={GetSubLabel(i + 1, entry.number_of_tickets)}
-              key={String(i) + entry.name}
+              label={entry.student}
+              subLabel={GetSubLabel(i + 1, entry.total_tickets)}
+              key={String(i) + entry.student}
             />
           ))}
         </>
